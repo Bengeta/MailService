@@ -14,11 +14,13 @@ public class RabbitMqListener : BackgroundService
     private IConnection _connection;
     private IModel _channel;
     private readonly IPhoneRepository _phoneRepository;
+    private readonly IMailRepository _mailRepository;
     private readonly IConfiguration _configuration;
 
-    public RabbitMqListener(IPhoneRepository phoneRepository, IConfiguration configuration)
+    public RabbitMqListener(IPhoneRepository phoneRepository, IMailRepository mailRepository, IConfiguration configuration)
     {
         _phoneRepository = phoneRepository;
+        _mailRepository = mailRepository;
         _configuration = configuration;
         var factory = new ConnectionFactory()
         {
@@ -64,7 +66,10 @@ public class RabbitMqListener : BackgroundService
 
                 Console.WriteLine($"Code: {request.Code} Phone: {request.Phone}");
 
-                _phoneRepository.SendVerificationCode(request);
+                if (request.IsMail)
+                    _mailRepository.SendVerificationCode(request);
+                else
+                    _phoneRepository.SendVerificationCode(request);
 
                 Console.WriteLine($"Получено сообщение: {content}");
 

@@ -9,6 +9,7 @@ builder.Configuration.AddJsonFile("data/appsettings.json");
 builder.Services.AddSingleton<MySmtpServer>();
 builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 builder.Services.AddSingleton<IPhoneRepository, PhoneRepository>();
+builder.Services.AddSingleton<IMailRepository, MailRepository>();
 builder.Services.AddHostedService<RabbitMqListener>();
 
 var app = builder.Build();
