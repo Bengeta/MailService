@@ -1,0 +1,50 @@
+name: Deploy Mail to Server
+
+on:
+  push:
+    branches:
+      - mail
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      keylink: ${{ secrets.KEYLINK }}
+      hostname: ${{ secrets.HOSTNAME }}
+      ssh_port: ${{ secrets.SSH_PORT }}
+      username: ${{ secrets.USERNAME }}
+      appsettings: ${{ secrets.MAIL_APPSET }}
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download App Settings
+        run: wget -O ./MailService/data/appsettings.json "$appsettings"
+
+      - name: Build Docker Image
+        run: docker build -t mail-image ./MailService/
+
+      - name: Save Image as Tar File
+        run: docker save mail-image -o image.tar
+
+      - name: Create ssh Known Hosts File
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+      - name: Add Server Host Key to ssh-agent
+        run: ssh-keyscan -H $hostname >> ~/.ssh/known_hosts
+      - name: Download SSH key
+        run: wget -O k.key "$keylink";chmod 400 k.key
+
+      - name: Deploy to Server
+        run: rsync -ratlz --rsh="ssh -i k.key -o StrictHostKeyChecking=no -l $username -p $ssh_port" image.tar $username@$hostname:/tmp
+
+      - name: Deploy Docker Compose to Server
+        run: rsync -ratlz --rsh="ssh -i k.key -o StrictHostKeyChecking=no -l ubuntu -p $ssh_port" ./MailService/docker-compose-mail.yml ubuntu@$hostname:./docker-compose-mail.yml
+
+      - name: Start Mail
+        run:
+          sudo ssh -i k.key -o StrictHostKeyChecking=no ubuntu@$hostname -p $ssh_port
+          "docker load -i /tmp/image.tar;
+          docker compose -f docker-compose-mail.yml up -d;
+          yes | docker image prune &"

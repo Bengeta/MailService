@@ -1,0 +1,23 @@
+version: '3.8'
+networks:
+  backend:
+    driver: bridge
+services:
+  mail-api:
+    container_name: mail
+    image: mail-image
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "25:25"
+      - "587:587"
+    networks:
+      - backend
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:25/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
