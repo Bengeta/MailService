@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Q+G8SUydewHItb+ROd7vT+HqkGFeU5AWP1ghErEFCMjlwLDYABn+QVMta/181BeZreX4G1/Grn1qswkhoODWOQ==",
+  "dgSpecHash": "Ftt6qPzC1kQvCqzs6P1qQczpryVNh52T1TsEfa6sIXOKjfbMq78e+LsnJcxVjdSBjJTg8KSj5StJ/fdePP4OAg==",
   "success": true,
   "projectFilePath": "/home/bender/Документы/Blender_projects/MailService/MailService.csproj",
   "expectedPackageFiles": [
@@ -16,7 +16,7 @@
     "/home/bender/.nuget/packages/system.security.cryptography.pkcs/6.0.2/system.security.cryptography.pkcs.6.0.2.nupkg.sha512",
     "/home/bender/.nuget/packages/system.text.encoding.codepages/6.0.0/system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "/home/bender/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512",
-    "/home/bender/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.5/microsoft.aspnetcore.app.ref.7.0.5.nupkg.sha512"
+    "/home/bender/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.7/microsoft.aspnetcore.app.ref.7.0.7.nupkg.sha512"
   ],
   "logs": []
 }

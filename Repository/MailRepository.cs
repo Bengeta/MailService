@@ -19,27 +19,20 @@ public class MailRepository : IMailRepository
         try
         {
             var smtpHost = _configuration.GetValue<string>("ServerName");
-            var smtpPort = 587;
-            string username = "your_username";
-            string password = "your_password";
+            var smtpPort = 25;
 
-            // Формирование сообщения
+            SmtpClient smtpClient = new SmtpClient(smtpHost, smtpPort);
+            smtpClient.EnableSsl = false;
+
             MailMessage message = new MailMessage();
             message.Subject = "Подтверждение почты";
             message.Body = "Код подтверждения: " + request.Code ;
             message.From = new MailAddress("sender@example.com");
             message.To.Add(new MailAddress(request.Mail));
 
-            // Подключение к SMTP-серверу
-            SmtpClient smtpClient = new SmtpClient(smtpHost, smtpPort);
-            smtpClient.EnableSsl = true;
-            smtpClient.Credentials = new NetworkCredential(username, password);
-
-            // Отправка сообщения
-            smtpClient.Send(message);
-            Console.WriteLine("Сообщение успешно отправлено");
-
-            return new ResponseModel<bool> { ResultCode = ResultCode.Success, Message = "Sms отправлена" };
+            await smtpClient.SendMailAsync(message);
+            Console.WriteLine("Сообщение успешно отправлено. Связь с SMTP-сервером установлена.");
+            return new ResponseModel<bool> { ResultCode = ResultCode.Success, Message = "Сообщение успелно отправленно" };
         }
         catch (Exception e)
         {
