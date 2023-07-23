@@ -35,7 +35,7 @@ public class RabbitMqListener : BackgroundService
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-            _channel.QueueDeclare(queue: "VerifyCodeQueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _channel.QueueDeclare(queue: "VerifyCodeQueue_", durable: false, exclusive: false, autoDelete: false, arguments: null);
         }
         catch (Exception ex)
         {

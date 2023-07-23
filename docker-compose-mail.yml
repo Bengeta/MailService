@@ -3,8 +3,8 @@ networks:
   backend:
     driver: bridge
 services:
-  mail-api:
-    container_name: mail
+  mail-ff-api:
+    container_name: mail-ff
     image: mail-image
     env_file:
       - .env
